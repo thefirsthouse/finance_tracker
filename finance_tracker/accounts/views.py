@@ -17,3 +17,12 @@ def register(request):
     else:
         form = RegisterUserForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+
+def profile(request):
+    if request.user.is_authenticated:
+        return render(request, "accounts/profile.html", {'user': request.user})
+
+
+def edit_profile(request):
+    pass
