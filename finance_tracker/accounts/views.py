@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterUserForm
+from django.contrib.auth.decorators import login_required
+from .forms import RegisterUserForm, EditProfileForm
 
 def logout_user(request):
     logout(request)
@@ -24,5 +25,13 @@ def profile(request):
         return render(request, "accounts/profile.html", {'user': request.user})
 
 
+@login_required
 def edit_profile(request):
-    pass
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=request.user)
+    return render(request, 'accounts/edit_profile.html', {'form': form})
