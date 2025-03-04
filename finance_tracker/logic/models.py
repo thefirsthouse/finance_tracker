@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 class Account(models.Model):
     CURRENCIES = [
@@ -28,8 +29,9 @@ class Account(models.Model):
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, related_name='accounts')
-    name = models.CharField(verbose_name='Name', max_length=20, unique=True, blank=True)
+    name = models.CharField(verbose_name='Name', max_length=20, blank=True)
     currency = models.CharField(verbose_name='Currency', choices=CURRENCIES, default=CURRENCIES[3], max_length=30)
+    balance = models.FloatField(verbose_name='Balance', default=0)
 
     def __str__(self):
         return self.name
@@ -50,14 +52,49 @@ class Category(models.Model):
         return self.name
 
 
-class Transfer(models.Model):
+class Record(models.Model):
     TYPES = [
         ('income', 'Income'),
-        ('expence', 'Expence'),
+        ('expense', 'Expense'),  # Исправлено 'expence' -> 'expense'
         ('transfer', 'Transfer')
     ]
-    type_of = models.CharField(verbose_name='Type', max_length=15, default='expence', choices=TYPES)
-    account = models.ForeignKey(Account, models.CASCADE, related_name='transfers')
-    category = models.ForeignKey(Category, models.CASCADE, related_name='transfers')
+    type_of = models.CharField(verbose_name='Type', max_length=15, default='expense', choices=TYPES)
+    account = models.ForeignKey(Account, models.CASCADE, related_name='records')
+    category = models.ForeignKey(Category, models.CASCADE, related_name='records')
+    amount = models.FloatField(verbose_name='Amount')  # убран лишний editable и blank
+    date_time = models.DateTimeField(verbose_name='Date and time', default=timezone.now)  # заменён auto_now_add
+
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            if self.type_of == "income":
+                self.account.balance += self.amount
+            elif self.type_of == "expense":
+                self.account.balance -= self.amount
+        else:
+            # if record is updates, amount delta must affect on balance
+            old_record = Record.objects.get(pk=self.pk)
+            if old_record.type_of == "income":
+                self.account.balance -= old_record.account
+            elif old_record.type_of == "expense":
+                self.account.balance += old_record.amount
+            
+            if self.type_of == 'income':
+                self.account.balance += self.amount
+            elif self.type_of == 'expense':
+                self.account.balance -= self.amount
+        
+        self.account.save()
+        super().save(*args, **kwargs)
+    
+
+    def __str__(self):
+        return f"{self.get_type_of_display()} - {self.amount} ({self.date_time.strftime('%Y-%m-%d %H:%M')})"
+
+
+
+class Transfer(models.Model):
+    account1 = models.ForeignKey(Account, models.CASCADE, related_name='transfer_from')
+    account2 = models.ForeignKey(Account, models.CASCADE, related_name='transfer_to')
     amount = models.FloatField(verbose_name='Amount', blank=True, editable=True)
-    date_time = models.DateTimeField(verbose_name='Date and time', editable=True)  # Сделать поле редактируемым
+    date_time = models.DateTimeField(verbose_name='Date and time', editable=True)

@@ -13,13 +13,13 @@ class CreateAccountForm(forms.ModelForm):
         }
 
 
-class TransferForm(forms.ModelForm):
+class RecordForm(forms.ModelForm):
     class Meta:
-        model = models.Transfer
-        fields = ['type_of', 'category', 'amount', 'date_time']
+        model = models.Record
+        fields = ['type_of', 'account', 'category', 'amount', 'date_time']
         labels = {
-            'type_of': 'Record type',
+            'type_of': 'Type',
             'category': 'Category',
             'amount': 'Amount',
-            'date_time': 'When'
+            'date_time': 'Date and time',
         }
