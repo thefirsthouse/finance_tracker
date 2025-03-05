@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('logic/', include('logic.urls')),
+    path('interface/', include('interface.urls')),
 ]

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Burry Lome{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="mb-4">Your Accounts</h2>
+
+        {% if user.is_authenticated %}
+            {% if accounts %}
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for account in accounts %}
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ account.name }}</h5>
+                                    <p class="card-text">Balance: {{ account.balance }} ₽</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center">You have no accounts yet. <a href="#">Create one</a></p>
+            {% endif %}
+        {% else %}
+            <p class="text-center">Please <a href="{% url 'login' %}">sign in</a> to view your accounts.</p>
+        {% endif %}
+    </div>
+{% endblock %}
