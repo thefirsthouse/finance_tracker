@@ -19,7 +19,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="no-accounts">You have no accounts yet. <a href="#">Create one</a></p>
+                <p class="no-accounts">You have no accounts yet. <a href="{% url 'create_account' %}">Create one</a></p>
             {% endif %}
         {% else %}
             <p class="text-center">Please <a href="{% url 'login' %}">sign in</a> to view your accounts.</p>
