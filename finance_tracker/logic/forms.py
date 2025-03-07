@@ -23,3 +23,9 @@ class RecordForm(forms.ModelForm):
             'amount': 'Amount',
             'date_time': 'Date and time',
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['account'].queryset = models.Account.objects.filter(user=user)

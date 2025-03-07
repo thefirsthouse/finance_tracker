@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import forms, models
+from .forms import RecordForm
 
 @login_required
 def create_account(request):
@@ -18,14 +19,16 @@ def create_account(request):
 @login_required
 def create_transfer(request):
     if request.method == "POST":
-        form = forms.RecordForm(request.POST)
+        form = forms.RecordForm(request.POST, user=request.user)
         if form.is_valid():
-            account = form.save(commit=False)
-            account.user = request.user
+            record = form.save(commit=False)
+            account = record.account
+            account.balance -= record.amount  # Уменьшить баланс на сумму записи
             account.save()
-            return redirect('profile')  # Замените 'some_view_name' на имя представления, куда нужно перенаправить после сохранения
+            record.save()
+            return redirect('profile')  # Замените 'profile' на имя представления, куда нужно перенаправить после сохранения
     else:
-        form = forms.RecordForm()
+        form = RecordForm(user=request.user)
     return render(request, 'logic/create_transfer.html', {'form': form})
 
 
