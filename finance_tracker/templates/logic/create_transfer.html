@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Transfer</title>
-</head>
-<body>
-    <h2>Create Transfer</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/create_transfer.css' %}">
+{% endblock %}
+
+{% block title %}Create Transfer{% endblock %}
+
+{% block content %}
+    <div class="transfer-container">
+        <h2 class="transfer-heading">Create Transfer</h2>
+        <form method="post" class="transfer-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-save">Save</button>
+        </form>
+    </div>
+{% endblock %}
