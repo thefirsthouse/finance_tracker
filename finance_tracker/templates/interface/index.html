@@ -10,12 +10,14 @@
             {% if accounts %}
                 <div class="account-cards">
                     {% for account in accounts %}
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ account.name }}</h5>
-                                <p class="card-text">Balance: {{ account.balance }} ₽</p>
+                        <a href="#" class="card-link">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ account.name }}</h5>
+                                    <p class="card-text">Balance: {{ account.balance }} ₽</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             {% else %}
