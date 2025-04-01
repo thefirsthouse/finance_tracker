@@ -3,32 +3,27 @@
 {% block title %}Burry Lome{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h2 class="heading">Your Accounts</h2>
-
-        {% if user.is_authenticated %}
-            {% if accounts %}
-                <div class="account-cards">
-                    {% for account in accounts %}
-                        <a href="#" class="card-link">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ account.name }}</h5>
-                                    <p class="card-text">Balance: {{ account.balance }} ₽</p>
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
+<div class="container">
+    <h2 class="heading">Your Accounts</h2>
+    
+    <div class="account-cards">
+        {% if accounts %}
+            <!-- Если есть счета, отображаем их -->
+            {% for account in accounts %}
+                <div class="card">
+                    <h3 class="card-title">{{ account.name }}</h3>
+                    <p class="card-text">Balance: {{ account.balance }}</p>
                 </div>
-                <!-- Кнопка "Создать счёт" внизу панели -->
-                <div class="create-account-fixed">
-                    <a href="{% url 'create_account' %}" class="btn create-account-btn">Create Account</a>
-                </div>
-            {% else %}
-                <p class="no-accounts">You have no accounts yet. <a href="{% url 'create_account' %}">Create one</a></p>
-            {% endif %}
+            {% endfor %}
         {% else %}
-            <p class="text-center">Please <a href="{% url 'login' %}">sign in</a> to view your accounts.</p>
+            <!-- Если счетов нет, выводим сообщение -->
+            <p class="no-accounts">У вас пока нет счетов.</p>
         {% endif %}
     </div>
+
+    <!-- Кнопка "Создать счёт" внутри рамки -->
+    <div class="create-account-container">
+        <a href="{% url 'create_account' %}" class="btn create-account-btn">Создать счёт</a>
+    </div>
+</div>
 {% endblock %}
