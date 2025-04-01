@@ -22,8 +22,8 @@
                 </div>
                 <!-- Кнопка "Создать счёт" внизу панели -->
                 <div class="create-account-fixed">
-                    <a href="{% url 'create_account' %}" class="btn create-account-btn">Создать счёт</a>
-                </div>                
+                    <a href="{% url 'create_account' %}" class="btn create-account-btn">Create Account</a>
+                </div>
             {% else %}
                 <p class="no-accounts">You have no accounts yet. <a href="{% url 'create_account' %}">Create one</a></p>
             {% endif %}
