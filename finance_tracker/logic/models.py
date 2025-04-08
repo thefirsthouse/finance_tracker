@@ -55,14 +55,14 @@ class Category(models.Model):
 class Record(models.Model):
     TYPES = [
         ('income', 'Income'),
-        ('expense', 'Expense'),  # Исправлено 'expence' -> 'expense'
+        ('expense', 'Expense'),
         ('transfer', 'Transfer')
     ]
     type_of = models.CharField(verbose_name='Type', max_length=15, default='expense', choices=TYPES)
     account = models.ForeignKey(Account, models.CASCADE, related_name='records')
     category = models.ForeignKey(Category, models.CASCADE, related_name='records')
-    amount = models.FloatField(verbose_name='Amount')  # убран лишний editable и blank
-    date_time = models.DateTimeField(verbose_name='Date and time', default=timezone.now)  # заменён auto_now_add
+    amount = models.FloatField(verbose_name='Amount')
+    date_time = models.DateTimeField(verbose_name='Date and time', default=timezone.now)
 
 
     def save(self, *args, **kwargs):

@@ -17,13 +17,31 @@
             {% endfor %}
         {% else %}
             <!-- Если счетов нет, выводим сообщение -->
-            <p class="no-accounts">У вас пока нет счетов.</p>
+            <p class="no-accounts">You have no account.</p>
         {% endif %}
     </div>
 
     <!-- Кнопка "Создать счёт" внутри рамки -->
     <div class="create-account-container">
-        <a href="{% url 'create_account' %}" class="btn create-account-btn">Создать счёт</a>
+        <a href="{% url 'create_account' %}" class="btn create-account-btn" style="text-decoration: none;">Create account</a>
+    </div>
+</div>
+<div class="container">
+    <h2>Last records</h2>
+
+    <!-- Кнопка "Добавить запись" -->
+    <a href="{% url 'create_transfer' %}" class="btn" style="text-decoration: none;">Create record</a>
+
+    <div class="record-list">
+        {% if records %}
+            <ul>
+                {% for record in records %}
+                    <li>{{ record.amount }} - {{ record.date_time }} ({{ record.category }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no record yet.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

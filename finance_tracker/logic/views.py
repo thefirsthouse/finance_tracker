@@ -37,8 +37,8 @@ def create_record(request):
     if request.method == "POST":
         form = forms.RecordForm(request.POST)
         if form.is_valid():
-            record = form.save(commit=False)  # Получаем объект, но не сохраняем
-            record.account = request.user.account  # Привязываем к аккаунту пользователя
+            record = form.save(commit=False)
+            record.account = request.user.account
             record.save()
     else:
         form = forms.RecordForm()
