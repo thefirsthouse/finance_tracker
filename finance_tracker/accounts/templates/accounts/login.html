@@ -1,9 +1,0 @@
-{% block content %}
-<h1>Authorisation</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p><button type="submit">Sign in</button></p>
-</form>
-{% endblock %}
