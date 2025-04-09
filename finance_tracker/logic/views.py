@@ -9,9 +9,9 @@ def create_account(request):
         form = forms.CreateAccountForm(request.POST)
         if form.is_valid():
             account = form.save(commit=False)
-            account.user = request.user  # Установить текущего пользователя
+            account.user = request.user
             account.save()
-            return redirect('profile')  # Замените 'profile' на имя представления, куда нужно перенаправить после сохранения
+            return redirect('main')
     else:
         form = forms.CreateAccountForm()
     return render(request, "logic/create_account.html", {"form": form})
@@ -23,10 +23,10 @@ def create_transfer(request):
         if form.is_valid():
             record = form.save(commit=False)
             account = record.account
-            account.balance -= record.amount  # Уменьшить баланс на сумму записи
+            account.balance -= record.amount
             account.save()
             record.save()
-            return redirect('profile')  # Замените 'profile' на имя представления, куда нужно перенаправить после сохранения
+            return redirect('main')
     else:
         form = RecordForm(user=request.user)
     return render(request, 'logic/create_transfer.html', {'form': form})
