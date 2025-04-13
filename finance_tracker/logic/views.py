@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from . import forms, models
+from . import forms
 from .forms import RecordForm
+from decimal import Decimal
 
 @login_required
 def create_account(request):
@@ -23,7 +24,12 @@ def create_transfer(request):
         if form.is_valid():
             record = form.save(commit=False)
             account = record.account
-            account.balance -= record.amount
+
+            if record.type_of == 'expense':
+                account.balance -= Decimal(record.amount)  # Приведение к Decimal
+            elif record.type_of == 'income':
+                account.balance += Decimal(record.amount)  # Приведение к Decimal
+
             account.save()
             record.save()
             return redirect('main')
@@ -39,6 +45,11 @@ def create_record(request):
         if form.is_valid():
             record = form.save(commit=False)
             record.account = request.user.account
+            
+            if record.type_of == 'expense':
+                record.account.balance -= Decimal(record.amount)  # Приведение к Decimal
+            elif record.type_of == 'income':
+                record.account.balance += Decimal(record.amount)  # Приведение к Decimal
             record.save()
     else:
         form = forms.RecordForm()
