@@ -31,6 +31,7 @@
 
     <!-- Кнопка "Добавить запись" -->
     <a href="{% url 'create_transfer' %}" class="btn" style="text-decoration: none;">Create record</a>
+    <a href="{% url 'records' %}" class="btn" style="text-decoration: none; background-color: #007bff;">All records</a>
 
     <div class="record-list">
         {% if records %}

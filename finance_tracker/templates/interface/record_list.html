@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Records{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="heading text-center">Your record</h2>
+    <div class="text-center" style="margin-bottom: 20px;">
+        <a href="{% url 'create_transfer' %}" class="create-account-btn">+ Add Record</a>
+    </div>
+
+    <div class="text-center" style="margin-bottom: 30px;">
+        <a href="?sort=date" class="btn">Sort by Date</a>
+        <a href="?sort=category" class="btn">Sort by Category</a>
+        <a href="?sort=type" class="btn">Sort by Type</a>
+    </div>
+
+    {% if records %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th style="padding: 10px;">Date</th>
+                    <th style="padding: 10px">Type</th>
+                    <th style="padding: 10px;">Category</th>
+                    <th style="padding: 10px;">Account</th>
+                    <th style="padding: 10px;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px;">{{ record.date_time|date:"Y-m-d H:i" }}</td>
+                    <td style="padding: 10px;">{{ record.get_type_of_display }}</td>
+                    <td style="padding: 10px;">{{ record.category.name }}</td>
+                    <td style="padding: 10px;">{{ record.account.name }}</td>
+                    <td style="padding: 10px;">
+                        {% if record.type_of == 'income' %}
+                            <span style="color: green;">+{{ record.amount }}</span>
+                        {% elif record.type_of == 'expence' %}
+                            <span style="color: red;">-{{ record.amount }}</span>
+                        {% else %}
+                            {{ record.amount }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">No records found</p>
+    {% endif %}
+</div>
+{% endblock %}
